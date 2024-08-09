@@ -17,7 +17,10 @@ namespace HMS.Controllers
         {
             return View();
         }
-
+        public IActionResult AboutMe()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
