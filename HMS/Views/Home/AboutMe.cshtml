@@ -2,5 +2,156 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "About Me";
 }
-<h1>Welcome to my Profile</h1>
+<style>
+    body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .intro {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: black;
+        color: white;
+        text-align: center;
+    }
+
+    img {
+        width: 100%;
+    }
+
+    .skills {
+        background-color: #2c2c2c;
+        color: white;
+        padding: 20px;
+    }
+
+    #main {
+        display: flex;
+    }
+
+    .details {
+        width: 50%;
+    }
+
+    .divider {
+        width: 20%;
+    }
+
+    .education {
+        display: flex;
+        margin: 0;
+    }
+
+    .headingEducation {
+        transform: rotate(-90deg);
+        contain: inline-size
+    }
+
+    .experience {
+        display: flex;
+        margin: 0;
+        background-color: #eeeeee;
+    }
+
+    .headingExperience {
+        transform: rotate(-90deg);
+        contain: inline-size
+    }
+
+    /* transform: rotate(-90deg); */
+</style>
+
+
+<body>
+    <div id="main">
+        <section style="width:30%">
+            @* <img src="img/1675939882600.jpeg" alt="profile photo" /> *@
+            <img src="~/images/1675939882600.jpeg" />
+            <div class="intro">
+                <h2>Ghufran Khan</h2>
+                <h3>Dot Net Developer</h3>
+            </div>
+            <div class="skills">
+                <h3>Skills</h3>
+                <ul>
+                    <li>Dot Net</li>
+                    <li>MVC</li>
+                    <li>Entity Framework</li>
+                    <li>Dappers</li>
+                    <li>Angular</li>
+                    <li>Sql Server</li>
+                    <li>Telerik Reporting</li>
+                </ul>
+                <h3>Languages</h3>
+                <ul>
+                    <li>English</li>
+                    <li>Urdu</li>
+                </ul>
+            </div>
+        </section>
+        <section class="divider"></section>
+        <section class="details">
+            <div>
+                <h1>Profile</h1>
+                <p>
+                    I have 3+ years of experience and working as a Senior Software Engineer with
+                    expertise in .NET & Angular, Telerik Reporting
+                    A self-motivated software developer with a proven track record of effectively
+                    collaborating within teams.
+                </p>
+                <p>
+                    2023 -Present | Software Engineer
+                </p>
+
+                <div class="education">
+                    <div class="headingEducation">
+                        <h2>EDUCATION</h2>
+                    </div>
+                    <div>
+                        <p>2011 - 2013 <br> Matric</p>
+                        <p></p>
+
+                        <p><strong>PR Boys High School</strong> </p>
+                        <p>2013 - 2016 <br> Fsc Pre Engeneering</p>
+                        <p><strong>Govt Islamiya College Railway Road</strong></p>
+                        <p>2016 - 2020 <br> Bs(Computer Science) </p>
+                        <p><strong>Virtual University</strong></p>
+                    </div>
+
+                </div>
+                <div class="experience">
+                    <div class="headingExperience">
+                        <h2>Experience</h2>
+                    </div>
+                    <div>
+                        <p>
+                            Implementing user interface elements using HTML, CSS, and JavaScript to
+                            create a responsive and visually appealing frontend
+                        </p>
+                        <p><strong>Informatics Lab</strong></p>
+                        <p>
+                            2022 -2023 | Dot Net Developer
+                        </p>
+                        <p>
+                            Implementing user interface elements using HTML, CSS, and JavaScript to
+                            create a responsive and visually appealing frontend
+                        </p>
+                        <p><strong>Smartrix Technologies</strong></p>
+                        <p>
+                            2021 -2022 | Junior Dot Net Developer
+                        </p>
+                        <p>
+                            Implementing user interface elements using HTML, CSS, and JavaScript to
+                            create a responsive and visually appealing frontend
+                        </p>
+                        <p><strong>MidwayTech</strong></p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</body>

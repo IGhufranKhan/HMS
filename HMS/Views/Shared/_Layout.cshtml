@@ -6,30 +6,45 @@
     <title>@ViewData["Title"] - HMS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HMS.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="~/images/favicon_io/favicon.ico">
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HMS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+    
+        
+        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+            <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/"><img src="~/images/logo2.png" /></a>
+            </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" style="background-color: #fff;">
+            <span class="fa fa-bars" style="color: #16A9CF;"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav mx-auto py-0  ">
+              <a href="/" class="nav-item nav-link active">Home</a>
+              <a href="/Home/ContactUs" class="nav-item nav-link">Contact Us</a>
+             
+             
+              
             </div>
+            <div class="dropdown btnHeader">
+                <button class="btn btn-secondary dropdown-toggle btnsub text-light rounded-pill py-2 px-4 ms-3" type="button" data-toggle="dropdown">
+                    Menu
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/Patient/Index">Patient</a></li>
+                    <li><a class="dropdown-item" href="/Doctor/Index">Doctor</a></li>
+                    <li><a class="dropdown-item" href="/Appointment/Index">Appointment</a></li>
+                    <li><a class="dropdown-item" href="/Billing/Index">Billing</a></li>
+                    
+                </ul>
+            </div>
+
+          </div>
         </nav>
-    </header>
+      
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -38,11 +53,13 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            Develop by Ghufran: 2024 - HMS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            Develop by Ghufran: 2024 - HMS - <a asp-area="" asp-controller="Home" asp-action="AboutMe">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
