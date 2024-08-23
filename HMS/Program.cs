@@ -1,5 +1,14 @@
+using HMS.Abstractions;
+using HMS.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Add dependency injections
+builder.Services.AddTransient<IPatientService, PatientService>();
+builder.Services.AddTransient<IDoctorService, DoctorService>();
+builder.Services.AddTransient<IDepartmentService, DepartmentService>();
+builder.Services.AddTransient<IBillingService, BillingService>();
+builder.Services.AddTransient<IAppointmentService, AppointmentService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

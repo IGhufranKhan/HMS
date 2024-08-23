@@ -6,7 +6,7 @@ namespace HMS.Extensions
     {
         public static Guid NewGuid(this Guid guid)
         {
-            return Guid.NewGuid();
+            return guid.NewGuid();
         }
     }
 }

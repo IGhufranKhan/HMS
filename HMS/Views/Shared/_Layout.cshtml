@@ -4,58 +4,93 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - HMS</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="icon" type="image/x-icon" href="~/images/favicon_io/favicon.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="/css/plugins/cubeportfolio/css/cubeportfolio.min.css">
+    <link href="/css/nivo-lightbox.css" rel="stylesheet" />
+    <link href="/css/nivo-lightbox-theme/default/default.css" rel="stylesheet" type="text/css" />
+    <link href="/css/owl.carousel.css" rel="stylesheet" media="screen" />
+    <link href="/css/owl.theme.css" rel="stylesheet" media="screen" />
+    <link href="/css/animate.css" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet">
 
+    <!-- boxed bg -->
+    <link id="bodybg" href="/css/bg1.css" rel="stylesheet" type="text/css" />
+    <!-- template skin -->
+    <link id="t-colors" href="/css/default.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/favicon_io/favicon.ico">
 </head>
-<body>
-    
-        
-        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-            <a class="navbar-brand" href="/">
-                <a class="navbar-brand" href="/"><img src="~/images/logo2.png" /></a>
-            </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" style="background-color: #fff;">
-            <span class="fa fa-bars" style="color: #16A9CF;"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav mx-auto py-0  ">
-              <a href="/" class="nav-item nav-link active">Home</a>
-              <a href="/Home/ContactUs" class="nav-item nav-link">Contact Us</a>
-             
-             
-              
-            </div>
-            <div class="dropdown btnHeader">
-                <button class="btn btn-secondary dropdown-toggle btnsub text-light rounded-pill py-2 px-4 ms-3" type="button" data-toggle="dropdown">
-                    Menu
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/Patient/Index">Patient</a></li>
-                    <li><a class="dropdown-item" href="/Doctor/Index">Doctor</a></li>
-                    <li><a class="dropdown-item" href="/Appointment/Index">Appointment</a></li>
-                    <li><a class="dropdown-item" href="/Billing/Index">Billing</a></li>
-                    
-                </ul>
-            </div>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
 
-          </div>
+
+    <div id="wrapper">
+
+        <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+           
+            <div class="container navigation">
+
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img src="~/images/logo1.png" alt="" width="100" height="100" />
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="/Home/ContactUs">Contact Us</a></li>
+                        
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@* <span class="badge custom-badge red pull-right">Extra</span> *@Menu <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/Patient">Patient</a></li>
+                                <li><a href="/Doctor">Doctor</a></li>
+                                <li><a href="/Appointment">Appointment</a></li>
+                                <li><a href="/Billing">Billing</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
         </nav>
-      
-    
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            Develop by Ghufran: 2024 - HMS - <a asp-area="" asp-controller="Home" asp-action="AboutMe">Privacy</a>
-        </div>
-    </footer>
+        @RenderBody()
+
+
+
+        <footer>
+
+            <div class="sub-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="wow fadeInLeft animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+                                <div class="text-left">
+                                    <div class="credits">
+                                        <a href="/">Desing by Ghufran | </a>
+                                        <a href="/Home/AboutMe">About Me</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <div class="wow fadeInRight animated" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInRight;">
+                                <div class="text-right">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <!-- Bootstrap JavaScript -->

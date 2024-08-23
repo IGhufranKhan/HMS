@@ -1,16 +1,15 @@
-﻿using HMS.Extensions;
+﻿using HMS.Models;
 
-namespace HMS.Models
+namespace HMS.Data
 {
-    public class Seeds
+    public static class Seeds
     {
-        Guid guid = Guid.Empty;
-        public List<Patient> SeedPatient()
+        public static List<Patient> Patient()
         {
             var model = new List<Patient>();
             var patient = new Patient()
             {
-                Id = guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Name = "Ghufran",
                 Age = 26,
                 Gender = Gender.Male,
@@ -26,18 +25,18 @@ namespace HMS.Models
                 },
                 AdmissionDate = DateTime.Now.AddDays(-3),
                 DischargeDate = DateTime.Now,
-                DoctorId = guid.NewGuid()
+                DoctorId = Guid.NewGuid()
 
             };
             model.Add(patient);
             return model;
         }
-        public List<Doctor> SeedDoctor()
+        public static List<Doctor> Doctor()
         {
             var model = new List<Doctor>();
             var doctor = new Doctor()
             {
-                Id = guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Name = "Ghufran Khan",
                 Specialization = Specialization.Cardiology,
                 Experience = 5,
@@ -49,14 +48,14 @@ namespace HMS.Models
             model.Add(doctor);
             return model;
         }
-        public List<Appointment> SeedAppointment()
+        public static List<Appointment> Appointment()
         {
             var model = new List<Appointment>();
             var appointment = new Appointment()
             {
-                Id = guid.NewGuid(),
-                PatientId = guid.NewGuid(),
-                DoctorId = guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                PatientId = Guid.NewGuid(),
+                DoctorId = Guid.NewGuid(),
                 AppointmentDate = DateTime.Now.AddDays(5),
                 Purpose = "CBC",
                 IsCompleted = true
@@ -65,13 +64,13 @@ namespace HMS.Models
             model.Add(appointment);
             return model;
         }
-        public List<Billing> SeedBilling()
+        public static List<Billing> Billing()
         {
             var model = new List<Billing>();
             var billing = new Billing()
             {
-                PatientId = guid.NewGuid(),
-                DoctorId = guid.NewGuid(),
+                PatientId = Guid.NewGuid(),
+                DoctorId = Guid.NewGuid(),
                 Amount = 5000,
                 BillingDate = DateTime.Now.AddDays(-2),
                 IsPaid = true
@@ -80,22 +79,22 @@ namespace HMS.Models
             model.Add(billing);
             return model;
         }
-        public List<Department> SeedDepartment()
+        public static List<Department> Department()
         {
             var model = new List<Department>();
             var department = new Department()
             {
-                Id = guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Name = "Cardialogy",
                 HeadOfDepartment = "Imran Ullah Khan",
                 ContactNumber = "090078601",
-                Doctors = SeedDoctor()
+                Doctors = Doctor()
 
             };
             model.Add(department);
             return model;
         }
-        public void SeedMembers()
+        public static void SeedMembers()
         {
             var model = new List<Member>();
             var members = new List<Member>()
@@ -106,9 +105,6 @@ namespace HMS.Models
             model.AddRange(members);
 
         }
+
     }
-
-
 }
-
-
