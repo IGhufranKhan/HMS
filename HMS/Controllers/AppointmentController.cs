@@ -8,14 +8,20 @@ namespace HMS.Controllers
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
-        public AppointmentController(IAppointmentService appointmentService)
+        private readonly HmsContext _hmsContext;
+        public AppointmentController(IAppointmentService appointmentService, HmsContext hmsContext)
         {
             _appointmentService = appointmentService;
+            _hmsContext = hmsContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchName)
         {
 
-            var model = _appointmentService.GetAppointments();
+            var model = _hmsContext.Appointments.ToList();
+            //if (!string.IsNullOrEmpty(searchName))
+            //{
+            //    model = model.Where(x => x.Name.Contains(searchName)).ToList();
+            //}
             return View(model);
         }
         public IActionResult Create()

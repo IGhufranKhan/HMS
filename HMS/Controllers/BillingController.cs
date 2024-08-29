@@ -1,20 +1,27 @@
 ﻿using HMS.Abstractions;
 using HMS.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace HMS.Controllers
 {
     public class BillingController : Controller
     {
         private readonly IBillingService _billingService;
-        public BillingController(IBillingService billingService)
+        private readonly HmsContext _hmsContext;
+        public BillingController(IBillingService billingService, HmsContext hmsContext)
         {
             _billingService = billingService;
+            _hmsContext = hmsContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchName)
         {
 
-            List<Billing> billings = _billingService.GetBillings();
+            var billings = _hmsContext.Billings.ToList();
+            //if (!string.IsNullOrEmpty(searchName))
+            //{
+            //    billings = billings.Where(x => x.Contains(searchName)).ToList();
+            //}
             return View(billings);
         }
         public IActionResult Create()

@@ -31,7 +31,6 @@ namespace HMS.Services
 
         public List<Doctor> GetDoctors()
         {
-            _doctors = Seeds.Doctor();
             return _doctors;
         }
 

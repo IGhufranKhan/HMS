@@ -7,8 +7,15 @@ namespace HMS.Services
     public class PatientService : IPatientService
     {
         private static List<Patient> _patients = Seeds.Patient();
+        private readonly IConfiguration _configuration;
+        public PatientService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public void AddPatient(Patient patient)
         {
+            string connectionString = _configuration.GetConnectionString("HMS");
+
             _patients.Add(patient);
         }
 

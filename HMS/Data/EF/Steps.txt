@@ -1,0 +1,27 @@
+﻿1. Install the following nuget packages to your project
+ Microsoft.EntityFrameworkCore
+ Microsoft.EntityFrameworkCore.Design
+ Microsoft.EntityFrameworkCore.SQlServer
+ Microsoft.EntityFrameworkCore.Tools
+
+2. Service Registration in Program.cs file and adding connection
+3: tools => Nuget package manager => package manager console
+
+
+public enum Gender 
+    {
+        Male,
+        Female,
+        Other
+    }
+
+ public enum Specialization
+    {
+        Cardiology,
+        Neurology,
+        GeneralMedicine,
+        Orthopedics
+    }
+    Scaffold-DbContext "HP\SQLEXPRESS;Database=HMS;
+    Trusted_Connection=True;Integrated Security=True;TrustServerCertificate=True;" 
+    Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context HmsContext -Force

@@ -6,15 +6,22 @@ namespace HMS.Controllers
 {
     public class DoctorController : Controller
     {
+     
         private IDoctorService _doctorService;
-        public DoctorController(IDoctorService doctorService)
+        private readonly HmsContext _hmsContext;
+        public DoctorController(IDoctorService doctorService, HmsContext hmsContext)
         {
             _doctorService = doctorService;
+            _hmsContext = hmsContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchName)
         {
             
-            var doctors = _doctorService.GetDoctors();
+            var doctors = _hmsContext.Doctors.ToList();
+            if(!string.IsNullOrEmpty(searchName))
+            {
+                doctors = doctors.Where(x => x.Name.Contains(searchName)).ToList();
+            }
             return View(doctors);
         }
         public IActionResult Create()
@@ -30,8 +37,7 @@ namespace HMS.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var model = new Doctor();
-            model = _doctorService.GetDoctorById(id);
+            var model = _doctorService.GetDoctorById(id);
             return View(model);
         }
         [HttpPost]

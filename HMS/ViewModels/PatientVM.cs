@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using HMS.Models;
 
-namespace HMS.Models;
+namespace HMS.ViewModels;
 
-public partial class Patient
+public class PatientVM
 {
     public Guid Id { get; set; }
 

@@ -10,7 +10,12 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+    <form asp-controller="Doctor" asp-action="Index" method="get">
+        <input type="text" name="searchName" value="" />
+        <input type="submit" value="Search" />
+        <input type="submit" name="name" value="Reset" />
+    </form>
+    <table class="table" id="patientTable">
     <thead>
         <tr>
             <th>
@@ -61,13 +66,99 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DepartmentId)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
+                    <td>
+
+                        <a href="/Doctor/Edit/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a> |
+
+                        <a href="/Doctor/Details/@item.Id"><i class="fa-solid fa-circle-info"></i></a>
+
+                        <a class="text-danger" href="/Doctor/Delete/@item.Id" title="Delete"><i class="fa-solid fa-trash"></i></a>
+                    </td>
         </tr>
 }
     </tbody>
+       
 </table>
+    <nav>
+        <ul class="pagination" id="pagination"></ul>
+    </nav>
 </div>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const rowsPerPage = 5;
+        const table = document.getElementById("patientTable").getElementsByTagName("tbody")[0];
+        const rows = Array.from(table.getElementsByTagName("tr"));
+        const pagination = document.getElementById("pagination");
+        let pageCount = Math.ceil(rows.length / rowsPerPage);
+        let currentSort = { column: '', direction: '' };
+
+        function displayPage(page) {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "none";
+            }
+            for (let i = (page - 1) * rowsPerPage; i < page * rowsPerPage && i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+        }
+
+        function setupPagination() {
+            pagination.innerHTML = "";
+            for (let i = 1; i <= pageCount; i++) {
+                const li = document.createElement("li");
+                li.className = "page-item";
+                const a = document.createElement("a");
+                a.className = "page-link";
+                a.href = "#";
+                a.innerText = i;
+
+                a.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    displayPage(i);
+                    document.querySelectorAll(".page-item").forEach(li => li.classList.remove("active"));
+                    li.classList.add("active");
+                });
+
+                li.appendChild(a);
+                pagination.appendChild(li);
+            }
+            pagination.getElementsByTagName("li")[0].classList.add("active");
+        }
+
+        function sortTable(column, direction) {
+            rows.sort(function (a, b) {
+                const aVal = a.querySelector(`[data-${column}]`).getAttribute(`data-${column}`);
+                const bVal = b.querySelector(`[data-${column}]`).getAttribute(`data-${column}`);
+
+                if (direction === "asc") {
+                    return aVal.localeCompare(bVal, undefined, { numeric: true });
+                } else {
+                    return bVal.localeCompare(aVal, undefined, { numeric: true });
+                }
+            });
+
+            rows.forEach(row => table.appendChild(row)); // Reattach rows in sorted order
+            displayPage(1);
+        }
+
+        document.querySelectorAll(".sort").forEach(header => {
+            header.addEventListener("click", function (e) {
+                e.preventDefault();
+                const column = e.target.getAttribute("data-sort");
+                let direction = "asc";
+
+                if (currentSort.column === column) {
+                    direction = currentSort.direction === "asc" ? "desc" : "asc";
+                }
+
+                currentSort = { column, direction };
+                sortTable(column, direction);
+                setupPagination();
+            });
+        });
+
+        displayPage(1);
+        setupPagination();
+    });
+
+
+</script>

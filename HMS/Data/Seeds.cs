@@ -1,4 +1,6 @@
 ﻿using HMS.Models;
+using System.Xml.Linq;
+using static HMS.Enums.Enums;
 
 namespace HMS.Data
 {
@@ -12,7 +14,7 @@ namespace HMS.Data
                 Id = Guid.NewGuid(),
                 Name = "Ghufran",
                 Age = 26,
-                Gender = Gender.Male,
+                Gender = (int)Gender.Male,
                 ContactNumber = "+92 3244562896",
                 Email = "devghufran786@gmail.com",
                 Address = new Address
@@ -33,20 +35,29 @@ namespace HMS.Data
         }
         public static List<Doctor> Doctor()
         {
-            var model = new List<Doctor>();
-            var doctor = new Doctor()
+            return new List<Doctor>()
+            {
+            new Doctor
             {
                 Id = Guid.NewGuid(),
                 Name = "Ghufran Khan",
-                Specialization = Specialization.Cardiology,
+                Specialization = (int)Specialization.Cardiology,
                 Experience = 5,
                 ContactNumber = "+92 3244562896",
                 Email = "devghufran786@gmail.com",
-                DepartmentId = null,
-
+                DepartmentId = null
+            },
+            new Doctor
+            {
+                Id = Guid.NewGuid(),
+                Name = "Kamran Khan",
+                Specialization = (int) Specialization.Cardiology,
+                Experience = 5,
+                ContactNumber = "+92 24324234",
+                Email = "kamran@gmail.com",
+                DepartmentId = null
+            }
             };
-            model.Add(doctor);
-            return model;
         }
         public static List<Appointment> Appointment()
         {
@@ -88,7 +99,7 @@ namespace HMS.Data
                 Name = "Cardialogy",
                 HeadOfDepartment = "Imran Ullah Khan",
                 ContactNumber = "090078601",
-                Doctors = Doctor()
+                //Doctors = Doctor()
 
             };
             model.Add(department);

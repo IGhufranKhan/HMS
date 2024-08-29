@@ -1,6 +1,7 @@
 ﻿using HMS.Abstractions;
 using HMS.Models;
 using HMS.Services;
+using HMS.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Runtime.InteropServices;
@@ -12,13 +13,22 @@ namespace HMS.Controllers
     public class PatientController : Controller
     {
         private readonly IPatientService _patientService;
-        public PatientController(IPatientService patientService)
+        private readonly HmsContext _hmsContext;
+        public PatientController(IPatientService patientService, HmsContext hmsContext)
         {
             _patientService = patientService;
+            _hmsContext = hmsContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchName)
         {
-            List<Patient> patients = _patientService.GetPatients();
+            var patients = _hmsContext.Patients.ToList();
+            //List<PatientVM> patientss = _hmsContext.Patients.ToList();
+            //patientss = patients;
+            ViewBag.SearchName = searchName;
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                patients = patients.Where(x => x.Name.Contains(searchName)).ToList();
+            }
             return View(patients);
         }
         public IActionResult Create()

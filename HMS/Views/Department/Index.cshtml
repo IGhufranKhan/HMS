@@ -11,6 +11,11 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+    <form asp-controller="Department" asp-action="Index" method="get">
+        <input type="text" name="searchName" value="" />
+        <input type="submit" value="Search" />
+        <input type="submit" name="name" value="Reset" />
+    </form>
 <table class="table">
     <thead>
         <tr>
@@ -50,11 +55,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Doctors)
                 </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                         @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
+                    </td>
         </tr>
 }
     </tbody>

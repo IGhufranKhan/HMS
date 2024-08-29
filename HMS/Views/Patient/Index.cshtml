@@ -1,92 +1,153 @@
-﻿@model IEnumerable<HMS.Models.Patient>
+﻿@using static HMS.Enums.Enums
+@model IEnumerable<HMS.Models.Patient>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
 <section>
     <div class="container intro-content">
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-        <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Age)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.Label("Contact")
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DoctorId)
-            </th>
-            <th>
-                @Html.Display("Admission Date")
-            </th>
-            <th>
-                @Html.Display("Discharge Date")
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoctorId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdmissionDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DischargeDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+        <form asp-controller="Patient" asp-action="Index" method="get">
+            <input type="text" name="searchName" id="searchInput" value="@ViewBag.SearchName" />
+            <input type="submit" value="Search" />
+            <button onclick="resetSearch()">Reset</button>
+        </form>
+        <table class="table table-bordered" id="patientTable">
+            <thead>
+                <tr>
+                    <th style="width:100px;"><a href="#" class="sort" data-sort="id">Id <b>#</b> <i class="fa fa-fw fa-sort"></i></a></th>
+                    <th style="width:100px;"><a href="#" class="sort" data-sort="name">Name <b>#</b> <i class="fa fa-fw fa-sort"></i></a></th>
+                    <th style="width:100px;"><a href="#" class="sort" data-sort="age">Age <b>#</b> <i class="fa fa-fw fa-sort"></i></a></th>
+                    <th style="width:100px;"><a href="#" class="sort" data-sort="gender">Gender <b>#</b> <i class="fa fa-fw fa-sort"></i></a></th>
+                    <th style="width:100px;">Contact</th>
+                    <th style="width:100px;"><a href="#" class="sort" data-sort="email">Email <b>#</b> <i class="fa fa-fw fa-sort"></i></a></th>
+                    <th>Address</th>
+                    <th><a href="#" class="sort" data-sort="doctor">Doctor <b>#</b> <i class="fa fa-fw fa-sort"></i></a></th>
+                    <th>Admission Date</th>
+                    <th>Discharge Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td data-id="@item.Id">@item.Id</td>
+                        <td data-name="@item.Name">@item.Name</td>
+                        <td data-age="@item.Age">@item.Age</td>
+                        <td data-gender="@item.Gender">@Enum.GetName(typeof(Gender), item.Gender)</td>
+                        <td>@item.ContactNumber</td>
+                        <td data-email="@item.Email">@item.Email</td>
+                        <td>@item.Address</td>
+                        <td data-doctor="@item.Doctor?.Name">@item.Doctor?.Name</td>
+                        <td>@item.AdmissionDate</td>
+                        <td>@item.DischargeDate</td>
+                        <td>
+
+                            <a href="/Patient/Edit/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a> |
+
+                            <a href="/Patient/Details/@item.Id"><i class="fa-solid fa-circle-info"></i></a>
+
+                            <a class="text-danger" href="/Patient/Delete/@item.Id" title="Delete"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+
+       
     </div>
 </section>
+<script type="text/javascript">
+    function resetSearch() {
+        document.getElementById('searchInput').value = '';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const rowsPerPage = 5;
+        const table = document.getElementById("patientTable").getElementsByTagName("tbody")[0];
+        const rows = Array.from(table.getElementsByTagName("tr"));
+        const pagination = document.getElementById("pagination");
+        let pageCount = Math.ceil(rows.length / rowsPerPage);
+        let currentSort = { column: '', direction: '' };
+
+        function displayPage(page) {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "none";
+            }
+            for (let i = (page - 1) * rowsPerPage; i < page * rowsPerPage && i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+        }
+
+        function setupPagination() {
+            pagination.innerHTML = "";
+            for (let i = 1; i <= pageCount; i++) {
+                const li = document.createElement("li");
+                li.className = "page-item";
+                const a = document.createElement("a");
+                a.className = "page-link";
+                a.href = "#";
+                a.innerText = i;
+
+                a.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    displayPage(i);
+                    document.querySelectorAll(".page-item").forEach(li => li.classList.remove("active"));
+                    li.classList.add("active");
+                });
+
+                li.appendChild(a);
+                pagination.appendChild(li);
+            }
+            pagination.getElementsByTagName("li")[0].classList.add("active");
+           }
+
+        function sortTable(column, direction) {
+            rows.sort(function (a, b) {
+                const aVal = a.querySelector(`[data-${column}]`).getAttribute(`data-${column}`);
+                const bVal = b.querySelector(`[data-${column}]`).getAttribute(`data-${column}`);
+
+                if (direction === "asc") {
+                    return aVal.localeCompare(bVal, undefined, { numeric: true });
+                } else {
+                    return bVal.localeCompare(aVal, undefined, { numeric: true });
+                }
+            });
+
+            rows.forEach(row => table.appendChild(row)); // Reattach rows in sorted order
+            displayPage(1);
+        }
+
+        document.querySelectorAll(".sort").forEach(header => {
+            header.addEventListener("click", function (e) {
+                e.preventDefault();
+                const column = e.target.getAttribute("data-sort");
+                let direction = "asc";
+
+                if (currentSort.column === column) {
+                    direction = currentSort.direction === "asc" ? "desc" : "asc";
+                }
+
+                currentSort = { column, direction };
+                sortTable(column, direction);
+                setupPagination();
+            });
+        });
+
+        displayPage(1);
+        setupPagination();
+    });
+    
+
+</script>

@@ -8,14 +8,20 @@ namespace HMS.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentService _departmentService;
-        public DepartmentController(IDepartmentService departmentService)
+        private readonly HmsContext _hmsContext;
+        public DepartmentController(IDepartmentService departmentService, HmsContext hmsContext)
         {
             _departmentService = departmentService;
+            _hmsContext = hmsContext;
         }
-       
-        public IActionResult Index()
+
+        public IActionResult Index(string searchName)
         {
-            var departments = _departmentService.GetDepartments();
+            var departments = _hmsContext.Departments.ToList();
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                departments = departments.Where(x => x.Name.Contains(searchName)).ToList();
+            }
             return View(departments);
         }
         public IActionResult Create(Department department)
