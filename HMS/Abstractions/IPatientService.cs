@@ -5,6 +5,8 @@ namespace HMS.Abstractions
     public interface IPatientService
     {
         void AddPatient(Patient patient);
+        void UpdatePatient(Patient patient);
+
 
         void DeletePatient(Patient patient);
 
@@ -13,5 +15,6 @@ namespace HMS.Abstractions
         Patient? GetPatientById(Guid id);
 
         List<Patient> GetPatients();
+        List<Patient> GetPatients(string serachName);
     }
 }

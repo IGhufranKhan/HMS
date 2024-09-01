@@ -10,12 +10,14 @@ var connectionString = builder.Configuration.GetConnectionString("HMS");
 builder.Services.AddDbContext<HmsContext>(options
           => options.UseSqlServer(connectionString));
 // Add dependency injections
-builder.Services.AddTransient<IPatientService, PatientService>();
-builder.Services.AddTransient<IDoctorService, DoctorService>();
-builder.Services.AddTransient<IDepartmentService, DepartmentService>();
-builder.Services.AddTransient<IBillingService, BillingService>();
-builder.Services.AddTransient<IAppointmentService, AppointmentService>();
-builder.Services.AddTransient<ITrackingService, TrackingService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IBillingService, BillingService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ITrackingService, TrackingService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

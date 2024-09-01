@@ -4,6 +4,7 @@ using HMS.Services;
 using HMS.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 
 
@@ -13,23 +14,27 @@ namespace HMS.Controllers
     public class PatientController : Controller
     {
         private readonly IPatientService _patientService;
-        private readonly HmsContext _hmsContext;
-        public PatientController(IPatientService patientService, HmsContext hmsContext)
+        //private readonly HmsContext _hmsContext;
+        public PatientController(IPatientService patientService)
         {
             _patientService = patientService;
-            _hmsContext = hmsContext;
+            //_hmsContext = hmsContext;
         }
         public IActionResult Index(string searchName)
         {
-            var patients = _hmsContext.Patients.ToList();
-            //List<PatientVM> patientss = _hmsContext.Patients.ToList();
-            //patientss = patients;
+            var patients = new List<Patient>();
             ViewBag.SearchName = searchName;
             if (!string.IsNullOrEmpty(searchName))
             {
-                patients = patients.Where(x => x.Name.Contains(searchName)).ToList();
+                patients = _patientService.GetPatients(searchName);
+                return View(patients);
             }
-            return View(patients);
+            else
+            {
+                patients = _patientService.GetPatients();
+                return View(patients);
+            }
+
         }
         public IActionResult Create()
         {
@@ -54,8 +59,20 @@ namespace HMS.Controllers
         public IActionResult Edit(Patient patient)
         {
             var model = _patientService.GetPatientById(patient.Id);
-            _patientService.DeletePatient(patient);
-            _patientService.AddPatient(patient);
+            if (model != null)
+            {
+                model.Name = patient.Name;
+                model.Age = patient.Age;
+                model.Gender = patient.Gender;
+                model.ContactNumber = patient.ContactNumber;
+                model.Email = patient.Email;
+                model.AddressId = patient.AddressId;
+                model.DoctorId = patient.DoctorId;
+                model.AdmissionDate = patient.AdmissionDate;
+                model.DischargeDate = patient.DischargeDate;
+                _patientService.UpdatePatient(model);
+            }
+
             return RedirectToAction("Index");
         }
 

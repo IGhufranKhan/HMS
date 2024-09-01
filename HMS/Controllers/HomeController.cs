@@ -11,23 +11,23 @@ namespace HMS.Controllers
         private readonly ITrackingService _trackingService;
         private readonly IPatientService _patientService;
         private readonly IDoctorService _doctorService;
-        private readonly HmsContext _context;
+        //private readonly HmsContext _context;
         
 
-        public HomeController(ILogger<HomeController> logger, ITrackingService trackingService, IPatientService patientService, IDoctorService doctorService,HmsContext context)
+        public HomeController(ILogger<HomeController> logger, ITrackingService trackingService, IPatientService patientService, IDoctorService doctorService)
         {
             _trackingService = trackingService;
             _logger = logger;
             _patientService = patientService;
             _doctorService = doctorService;
-            _context = context;
+            
         }
 
         public IActionResult Index()
         {
             _trackingService.IncrementVisitCount();
-            var totalPatients = _context.Patients.Count();
-            var totalDoctors = _context.Doctors.Count();
+            var totalPatients = _patientService.GetPatients().Count();
+            var totalDoctors = _doctorService.GetDoctors().Count();
             
             var totalVisits = _trackingService.GetTotalVisits();
             ViewBag.TotalVisits = totalVisits;
