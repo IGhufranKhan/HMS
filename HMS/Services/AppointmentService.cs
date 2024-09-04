@@ -1,20 +1,25 @@
 ﻿using HMS.Abstractions;
-using HMS.Data;
+//using HMS.Data;
 using HMS.Models;
 
 namespace HMS.Services
 {
     public class AppointmentService : IAppointmentService
     {
-        private static List<Appointment> _appointments = Seeds.Appointment();
+        private readonly HmsContext _hmsContext;
+        public AppointmentService(HmsContext hmsContext)
+        {
+            _hmsContext = hmsContext;
+        }
+
         public void AddAppointment(Appointment appointment)
         {
-            _appointments.Add(appointment);
+            _hmsContext.Appointments.Add(appointment);
         }
 
         public void DeleteAppointment(Appointment appointment)
         {
-            _appointments.Remove(appointment);
+            _hmsContext.Appointments.Remove(appointment);
         }
 
         public void DeleteAppointment(Guid id)
@@ -26,12 +31,12 @@ namespace HMS.Services
 
         public Appointment? GetAppointmentById(Guid id)
         {
-            return _appointments.FirstOrDefault(m => m.Id == id);
+            return _hmsContext.Appointments.FirstOrDefault(m => m.Id == id);
         }
 
         public List<Appointment> GetAppointments()
         {
-            _appointments = Seeds.Appointment();
+            var _appointments = _hmsContext.Appointments.ToList();
             return _appointments;
         }
     }

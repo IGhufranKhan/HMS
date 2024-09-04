@@ -1,20 +1,23 @@
 ﻿using HMS.Abstractions;
-using HMS.Data;
 using HMS.Models;
 
 namespace HMS.Services
 {
     public class DepartmentService : IDepartmentService
     {
-        private static List<Department> _departments = Seeds.Department();
+        private readonly HmsContext _hmsContext;
+        public DepartmentService(HmsContext hmsContext)
+        {
+            _hmsContext = hmsContext;
+        }
         public void AddDepartment(Department department)
         {
-            _departments.Add(department);
+            _hmsContext.Departments.Add(department);
         }
 
         public void DeleteDepartment(Department department)
         {
-            _departments.Remove(department);
+            _hmsContext.Departments.Remove(department);
         }
 
         public void DeleteDepartment(Guid id)
@@ -26,12 +29,14 @@ namespace HMS.Services
 
         public Department? GetDepartmentById(Guid id)
         {
-            return _departments.FirstOrDefault(m => m.Id == id);
+            var _department = GetDepartments();
+            //_department = _department.FirstOrDefault(x => x.Id == id);
+            return _department.FirstOrDefault(m => m.Id == id);
         }
 
         public List<Department> GetDepartments()
         {
-            _departments = Seeds.Department();
+            var _departments = _hmsContext.Departments.ToList();
             return _departments;
         }
     }

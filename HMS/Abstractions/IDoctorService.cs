@@ -13,5 +13,6 @@ namespace HMS.Abstractions
         Doctor? GetDoctorById(Guid id);
 
         List<Doctor> GetDoctors();
+        void UpdateDoctor(Doctor doctor);
     }
 }

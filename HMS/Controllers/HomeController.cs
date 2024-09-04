@@ -26,13 +26,13 @@ namespace HMS.Controllers
         public IActionResult Index()
         {
             _trackingService.IncrementVisitCount();
-            var totalPatients = _patientService.GetPatients().Count();
-            var totalDoctors = _doctorService.GetDoctors().Count();
+            //var totalPatients = _patientService.GetPatients()..Count();
+            //var totalDoctors = _doctorService.GetDoctors().Count();
             
             var totalVisits = _trackingService.GetTotalVisits();
             ViewBag.TotalVisits = totalVisits;
-            ViewBag.TotalPatients = totalPatients;
-            ViewBag.TotalDoctors = totalDoctors;
+            ViewBag.TotalPatients = 10;
+            ViewBag.TotalDoctors = 10;
             
             return View();
         }

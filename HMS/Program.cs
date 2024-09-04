@@ -18,6 +18,8 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IBillingService, BillingService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<ITrackingService, TrackingService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IMasterService, MasterService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

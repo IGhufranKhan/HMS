@@ -22,4 +22,6 @@ public partial class Member
     public DateTime? LastLoginDate { get; set; }
 
     public int? Age { get; set; }
+
+    public bool? IsActive { get; set; }
 }

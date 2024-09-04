@@ -14,7 +14,7 @@ namespace HMS.Abstractions
 
         Patient? GetPatientById(Guid id);
 
-        List<Patient> GetPatients();
-        List<Patient> GetPatients(string serachName);
+        Task<List<Patient>> GetPatients();
+        Task<List<Patient>> GetPatients(string serachName);
     }
 }

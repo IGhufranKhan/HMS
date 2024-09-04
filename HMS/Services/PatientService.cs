@@ -1,8 +1,6 @@
 ﻿using HMS.Abstractions;
-using HMS.Data;
 using HMS.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace HMS.Services
 {
@@ -11,10 +9,14 @@ namespace HMS.Services
         
         private readonly HmsContext _hmsContext;
         private readonly IConfiguration _configuration;
-        public PatientService(IConfiguration configuration, HmsContext hmsContext)
+        private readonly IAddressService _addressService;
+        private readonly IDoctorService _doctorService;
+        public PatientService(IConfiguration configuration, HmsContext hmsContext, IAddressService addressService, IDoctorService doctorService)
         {
             _configuration = configuration;
             _hmsContext = hmsContext;
+            _addressService = addressService;
+            _doctorService = doctorService;
         }
         public void AddPatient(Patient patient)
         {
@@ -31,21 +33,34 @@ namespace HMS.Services
         public void DeletePatient(Guid id)
         {
             Patient? patient = GetPatientById(id);
-            DeletePatient(patient);
+            if(patient != null)
+            {
+                DeletePatient(patient);
+            }
+            
+            
         }
 
         public Patient? GetPatientById(Guid id)
         {
-            return _hmsContext.Patients.FirstOrDefault(m => m.Id == id);
+            var _patients = GetPatients();
+            return _patients.Result.FirstOrDefault(m => m.Id == id);
         }
 
-        public List<Patient> GetPatients()
+        public async Task <List<Patient>> GetPatients()
         {
-            return _hmsContext.Patients.ToList() ;
+            var _patients = await _hmsContext.Patients.Where(x => x.IsActive == true).ToListAsync();
+            var addresses = _addressService.GetAddresss(); 
+            var doctors = _doctorService.GetDoctors();
+            
+            //_patients = _patients.Where(x => addresses.Contains(x.Address)).ToList();
+            //_patients = _patients.Where(x => doctors.Contains(x.Doctor)).ToList();
+
+            return _patients;
         }
-        public List<Patient> GetPatients(string serachName)
+        public async Task <List<Patient>> GetPatients(string serachName)
         {
-            return _hmsContext.Patients.Where(x => x.Name.Contains(serachName, StringComparison.OrdinalIgnoreCase)).ToList();
+            return await _hmsContext.Patients.Where(x => x.Name.Contains(serachName, StringComparison.OrdinalIgnoreCase)).ToListAsync();
         }
         public void UpdatePatient(Patient patient)
         {

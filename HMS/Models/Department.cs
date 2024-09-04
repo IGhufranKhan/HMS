@@ -13,5 +13,7 @@ public partial class Department
 
     public string? ContactNumber { get; set; }
 
+    public bool? IsActive { get; set; }
+
     public virtual ICollection<Doctor> Doctors { get; } = new List<Doctor>();
 }

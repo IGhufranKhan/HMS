@@ -1,20 +1,24 @@
 ﻿using HMS.Abstractions;
-using HMS.Data;
 using HMS.Models;
 
 namespace HMS.Services
 {
     public class BillingService : IBillingService
     {
-        private static List<Billing> _billings = Seeds.Billing();
+        //private static List<Billing> _billings = Seeds.Billing();
+        private readonly HmsContext _hmsContext;
+        public BillingService(HmsContext hmsContext)
+        {
+            _hmsContext = hmsContext;
+        }
         public void AddBilling(Billing billing)
         {
-            _billings.Add(billing);
+            _hmsContext.Billings.Add(billing);
         }
 
         public void DeleteBilling(Billing billing)
         {
-            _billings.Remove(billing);
+            _hmsContext.Billings.Remove(billing);
         }
 
         public void DeleteBilling(Guid id)
@@ -26,12 +30,12 @@ namespace HMS.Services
 
         public Billing? GetBillingById(Guid id)
         {
-            return _billings.FirstOrDefault(m => m.Id == id);
+            return _hmsContext.Billings.FirstOrDefault(m => m.Id == id);
         }
 
         public List<Billing> GetBillings()
         {
-            _billings = Seeds.Billing();
+            var _billings = _hmsContext.Billings.ToList();
             return _billings;
         }
     }

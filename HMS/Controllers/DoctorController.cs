@@ -9,15 +9,17 @@ namespace HMS.Controllers
      
         private IDoctorService _doctorService;
         private readonly HmsContext _hmsContext;
-        public DoctorController(IDoctorService doctorService, HmsContext hmsContext)
+        private readonly IMasterService _masterService;
+        public DoctorController(IDoctorService doctorService, HmsContext hmsContext, IMasterService masterService)
         {
             _doctorService = doctorService;
             _hmsContext = hmsContext;
+            _masterService = masterService;
         }
         public IActionResult Index(string searchName)
         {
             
-            var doctors = _hmsContext.Doctors.ToList();
+            var doctors = _doctorService.GetDoctors();
             if(!string.IsNullOrEmpty(searchName))
             {
                 doctors = doctors.Where(x => x.Name.Contains(searchName)).ToList();
@@ -26,6 +28,7 @@ namespace HMS.Controllers
         }
         public IActionResult Create()
         {
+            ViewBag.GetDepartment = _masterService.GetDepartmentName();
             return View();
         }
         [HttpPost]
@@ -58,7 +61,11 @@ namespace HMS.Controllers
         public IActionResult Delete(Guid id)
         {
             var model = _doctorService.GetDoctorById(id);
-            _doctorService.DeleteDoctor(model);
+            if (model != null) 
+            {
+             model.IsActive = false;
+            }
+            _doctorService.UpdateDoctor(model);
             return RedirectToAction("Index");
         }
 
