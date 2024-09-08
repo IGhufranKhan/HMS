@@ -59,7 +59,13 @@ namespace HMS.Services
                     model.Gender = patient.Gender;
                     model.ContactNumber = patient.ContactNumber;
                     model.Email = patient.Email;
-                    model.AddressId = patient.AddressId;
+                    model.Address.Id = model.Address.Id;
+                    model.Address.Country = patient.Address.Country;
+                    model.Address.State = patient.Address.State;
+                    model.Address.City = patient.Address.City;
+                    model.Address.PostalCode = patient.Address.PostalCode;
+                    model.Address.Street = patient.Address.Street;
+                    
                     model.DoctorId = patient.DoctorId;
                     model.AdmissionDate = patient.AdmissionDate;
                     model.DischargeDate = patient.DischargeDate;

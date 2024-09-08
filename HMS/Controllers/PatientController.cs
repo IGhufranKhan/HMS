@@ -1,10 +1,14 @@
-﻿using HMS.Abstractions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+using HMS.Abstractions;
 using HMS.Models;
 using HMS.Services;
 using HMS.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 using System.Runtime.InteropServices;
 
 
@@ -16,11 +20,14 @@ namespace HMS.Controllers
         private readonly IPatientService _patientService;
         private readonly HmsContext _hmsContext;
         private readonly IMasterService _masterService;
-        public PatientController(IPatientService patientService, HmsContext hmsContext, IMasterService masterService)
+        private IValidator<Patient> _validator;
+
+        public PatientController(IPatientService patientService, HmsContext hmsContext, IMasterService masterService, IValidator<Patient> validator)
         {
             _patientService = patientService;
             _hmsContext = hmsContext;
             _masterService = masterService;
+            _validator = validator;
         }
         public async Task <IActionResult> Index(string searchName)
         {
@@ -47,6 +54,13 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Create(Patient patient)
         {
+            ValidationResult result = _validator.Validate(patient);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.Doctors = _masterService.GetDoctorDropdownList();
+                return View("Create", patient);
+            }
             patient.AddressId = patient.Address?.Id;
             _patientService.AddPatient(patient);
             return RedirectToAction("Index");
@@ -55,18 +69,26 @@ namespace HMS.Controllers
         public IActionResult Edit(Guid id)
         {
             var model = _patientService.GetPatientById(id);
-            ViewBag.AddressId = new SelectList(_hmsContext.Addresses, "Id", "Address");
-            ViewBag.DoctorId = new SelectList(_hmsContext.Doctors, "Id", "Name");
+           // ViewBag.AddressId = new SelectList(_hmsContext.Addresses, "Id", "Address");
+            ViewBag.DoctorId = _masterService.GetDoctorDropdownList();
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(Patient patient)
         {
-            if(patient != null)
+            ValidationResult result = _validator.Validate(patient);
+            if (!result.IsValid)
             {
+                result.AddToModelState(this.ModelState);
+                ViewBag.DoctorId = _masterService.GetDoctorDropdownList();
+                return View("Edit", patient);
+            }
+            if (patient != null)
+            {
+
                 _patientService.UpdatePatient(patient);
             }
-          
+
             return RedirectToAction("Index");
         }
 

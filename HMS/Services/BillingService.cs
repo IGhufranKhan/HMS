@@ -1,5 +1,6 @@
 ﻿using HMS.Abstractions;
 using HMS.Models;
+using System.Security.Cryptography.Xml;
 
 namespace HMS.Services
 {
@@ -42,7 +43,7 @@ namespace HMS.Services
 
         public List<Billing> GetBillings()
         {
-            var _billings = _hmsContext.Billings.Where(x => x.IsActive == true).ToList();
+            var _billings = _hmsContext.Billings.Where(x => x.IsActive == true || x.IsActive == null).ToList();
             var patient = _patientService.GetPatientById(_billings.Select(x => x.PatientId).FirstOrDefault());
             _billings.Select(x => x.Patient == patient);
 

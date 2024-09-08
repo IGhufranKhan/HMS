@@ -1,4 +1,7 @@
-﻿using HMS.Abstractions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+using HMS.Abstractions;
 using HMS.Models;
 using HMS.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +12,12 @@ namespace HMS.Controllers
     {
         private readonly IDepartmentService _departmentService;
         private readonly HmsContext _hmsContext;
-        public DepartmentController(IDepartmentService departmentService, HmsContext hmsContext)
+        private IValidator<Department> _validator;
+        public DepartmentController(IDepartmentService departmentService, HmsContext hmsContext, IValidator<Department> validator)
         {
             _departmentService = departmentService;
             _hmsContext = hmsContext;
+            _validator = validator;
         }
 
         public IActionResult Index(string searchName)
@@ -26,6 +31,13 @@ namespace HMS.Controllers
         }
         public IActionResult Create(Department department)
         {
+            ValidationResult result = _validator.Validate(department);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                
+                return View("Create", department);
+            }
             _departmentService.AddDepartment(department);
             return RedirectToAction("Index");
         }
@@ -38,6 +50,13 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Edit(Department department)
         {
+            ValidationResult result = _validator.Validate(department);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                
+                return View("Edit", department);
+            }
             var model = _departmentService.GetDepartmentById(department.Id);
             _departmentService.DeleteDepartment(department);
             _departmentService.AddDepartment(department);

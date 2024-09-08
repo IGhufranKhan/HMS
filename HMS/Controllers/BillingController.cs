@@ -1,4 +1,7 @@
-﻿using HMS.Abstractions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+using HMS.Abstractions;
 using HMS.Models;
 using HMS.Services;
 using HMS.ViewModels;
@@ -12,11 +15,13 @@ namespace HMS.Controllers
         private readonly IBillingService _billingService;
         private readonly HmsContext _hmsContext;
         private readonly IMasterService _masterService;
-        public BillingController(IBillingService billingService, HmsContext hmsContext, IMasterService masterService)
+        private IValidator<Billing> _validator;
+        public BillingController(IBillingService billingService, HmsContext hmsContext, IMasterService masterService, IValidator<Billing> validator)
         {
             _billingService = billingService;
             _hmsContext = hmsContext;
             _masterService = masterService;
+            _validator = validator;
         }
         public IActionResult Index(string searchName)
         {
@@ -37,6 +42,14 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Create(Billing billing)
         {
+            ValidationResult result = _validator.Validate(billing);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.GetPatients = _masterService.GetPatientNames();
+                ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
+                return View("Create", billing);
+            }
             _billingService.AddBilling(billing);
             return RedirectToAction("Index");
         }
@@ -51,6 +64,14 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Edit(Billing billing)
         {
+            ValidationResult result = _validator.Validate(billing);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.GetPatients = _masterService.GetPatientNames();
+                ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
+                return View("Edit", billing);
+            }
             if (billing != null)
             {
                 _billingService.UpdateBilling(billing);

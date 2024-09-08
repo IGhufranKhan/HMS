@@ -1,4 +1,7 @@
-﻿using HMS.Abstractions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+using HMS.Abstractions;
 using HMS.Models;
 using HMS.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +13,13 @@ namespace HMS.Controllers
         private readonly IAppointmentService _appointmentService;
         private readonly HmsContext _hmsContext;
         private readonly IMasterService _masterService;
-        public AppointmentController(IAppointmentService appointmentService, HmsContext hmsContext, IMasterService masterService)
+        private IValidator<Appointment> _validator;
+        public AppointmentController(IAppointmentService appointmentService, HmsContext hmsContext, IMasterService masterService, IValidator<Appointment> validator)
         {
             _appointmentService = appointmentService;
             _hmsContext = hmsContext;
             _masterService = masterService;
+            _validator = validator;
         }
         public IActionResult Index(string searchName)
         {
@@ -32,6 +37,14 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Create(Appointment appointment)
         {
+            ValidationResult result = _validator.Validate(appointment);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.GetPatients = _masterService.GetPatientNames();
+                ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
+                return View("Create", appointment);
+            }
             _appointmentService.AddAppointment(appointment);
             return RedirectToAction("Index");
         }
@@ -46,7 +59,14 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Edit(Appointment appointment)
         {
-            
+            ValidationResult result = _validator.Validate(appointment);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.GetPatients = _masterService.GetPatientNames();
+                ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
+                return View("Edit", appointment);
+            }
             _appointmentService.UpdateAppointment(appointment);
             return RedirectToAction("Index");
         }

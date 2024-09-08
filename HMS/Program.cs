@@ -1,6 +1,8 @@
+using FluentValidation;
 using HMS.Abstractions;
 using HMS.Models;
 using HMS.Services;
+using HMS.Validators;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -20,6 +22,13 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<ITrackingService, TrackingService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IMasterService, MasterService>();
+//Validators
+builder.Services.AddScoped<IValidator<Patient>, PatientValidator>();
+builder.Services.AddScoped<IValidator<Address>, AddressValidator>();
+builder.Services.AddScoped<IValidator<Billing>, BillingValidator>();
+builder.Services.AddScoped<IValidator<Department>, DepartmentValidator>();
+builder.Services.AddScoped<IValidator<Doctor>, DoctorValidator>();
+builder.Services.AddScoped<IValidator<Appointment>, AppointmentValidator>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

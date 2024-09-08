@@ -97,6 +97,8 @@
                             <div class="form-group">
                                 <label asp-for="DoctorId" class="control-label">Doctor Name</label>
                                 <select asp-for="DoctorId" class="form-control" asp-items="ViewBag.Doctors"></select>
+                            <span asp-validation-for="DoctorId" class="text-danger"></span>
+
                             </div>
                         </div>
                     </div>

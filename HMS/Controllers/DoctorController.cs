@@ -1,4 +1,7 @@
-﻿using HMS.Abstractions;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+using HMS.Abstractions;
 using HMS.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +13,13 @@ namespace HMS.Controllers
         private IDoctorService _doctorService;
         private readonly HmsContext _hmsContext;
         private readonly IMasterService _masterService;
-        public DoctorController(IDoctorService doctorService, HmsContext hmsContext, IMasterService masterService)
+        private IValidator<Doctor> _validator;
+        public DoctorController(IDoctorService doctorService, HmsContext hmsContext, IMasterService masterService, IValidator<Doctor> validator)
         {
             _doctorService = doctorService;
             _hmsContext = hmsContext;
             _masterService = masterService;
+            _validator = validator;
         }
         public IActionResult Index(string searchName)
         {
@@ -34,6 +39,13 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Create(Doctor doctor)
         {
+            ValidationResult result = _validator.Validate(doctor);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.GetDepartment = _masterService.GetDepartmentName();
+                return View("Create", doctor);
+            }
             _doctorService.AddDoctor(doctor);
             return RedirectToAction("Index");
         }
@@ -47,6 +59,13 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Edit(Doctor doctor)
         {
+            ValidationResult result = _validator.Validate(doctor);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                ViewBag.GetDepartment = _masterService.GetDepartmentName();
+                return View("Edit", doctor);
+            }
             var model = _doctorService.GetDoctorById(doctor.Id);
             if(model != null)
             {
