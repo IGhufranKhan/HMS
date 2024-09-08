@@ -9,23 +9,24 @@ namespace HMS.Controllers
     {
         private readonly IAppointmentService _appointmentService;
         private readonly HmsContext _hmsContext;
-        public AppointmentController(IAppointmentService appointmentService, HmsContext hmsContext)
+        private readonly IMasterService _masterService;
+        public AppointmentController(IAppointmentService appointmentService, HmsContext hmsContext, IMasterService masterService)
         {
             _appointmentService = appointmentService;
             _hmsContext = hmsContext;
+            _masterService = masterService;
         }
         public IActionResult Index(string searchName)
         {
 
-            var model = _hmsContext.Appointments.ToList();
-            //if (!string.IsNullOrEmpty(searchName))
-            //{
-            //    model = model.Where(x => x.Name.Contains(searchName)).ToList();
-            //}
+            var model = _appointmentService.GetAppointments();
+           
             return View(model);
         }
         public IActionResult Create()
         {
+            ViewBag.GetPatients = _masterService.GetPatientNames();
+            ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
             return View();
         }
         [HttpPost]
@@ -37,17 +38,16 @@ namespace HMS.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var model = new Appointment();
-            model = _appointmentService.GetAppointmentById(id);
+            ViewBag.GetPatients = _masterService.GetPatientNames();
+            ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
+            var model = _appointmentService.GetAppointmentById(id);
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(Appointment appointment)
         {
-            var model = _appointmentService.GetAppointmentById(appointment.Id);
-
-            _appointmentService.DeleteAppointment(model);
-            _appointmentService.AddAppointment(appointment);
+            
+            _appointmentService.UpdateAppointment(appointment);
             return RedirectToAction("Index");
         }
 
@@ -58,8 +58,7 @@ namespace HMS.Controllers
         }
         public IActionResult Delete(Guid id)
         {
-            var model = _appointmentService.GetAppointmentById(id);
-            _appointmentService.DeleteAppointment(model);
+            _appointmentService.DeleteAppointment(id);
             return RedirectToAction("Index");
         }
 

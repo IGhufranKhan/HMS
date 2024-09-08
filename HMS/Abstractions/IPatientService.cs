@@ -7,12 +7,9 @@ namespace HMS.Abstractions
         void AddPatient(Patient patient);
         void UpdatePatient(Patient patient);
 
-
-        void DeletePatient(Patient patient);
-
         void DeletePatient(Guid id);
 
-        Patient? GetPatientById(Guid id);
+        Patient? GetPatientById(Guid? id);
 
         Task<List<Patient>> GetPatients();
         Task<List<Patient>> GetPatients(string serachName);

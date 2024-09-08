@@ -55,10 +55,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Doctors)
                 </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    <td style="width: 8%;">
+
+                        <a href="/Department/Edit/@item.Id"><i class="fa-solid fa-pen-to-square" title="Edit"></i></a> |
+
+                        <a href="/Department/Details/@item.Id"><i class="fa-solid fa-circle-info" title="Details"></i></a>
+
+                        <a class="text-danger" href="/Department/Delete/@item.Id" title="Delete"><i class="fa-solid fa-trash" title="Delete"></i></a>
                     </td>
         </tr>
 }

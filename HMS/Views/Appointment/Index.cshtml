@@ -23,10 +23,10 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PatientId)
+                @Html.DisplayName("Patient Name")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DoctorId)
+                @Html.DisplayName("Doctor Name")
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AppointmentDate)
@@ -47,10 +47,10 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PatientId)
+                @Html.DisplayFor(modelItem => item.Patient.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DoctorId)
+                @Html.DisplayFor(modelItem => item.Doctor.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AppointmentDate)
@@ -61,7 +61,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsCompleted)
             </td>
-                    <td>
+                    <td style="width: 8%">
 
                         <a href="/Appointment/Edit/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a> |
 

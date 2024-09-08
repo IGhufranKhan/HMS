@@ -42,7 +42,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Doctor)
                 </th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -101,10 +101,14 @@
                     }
 
 
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                <td style="width: 8%;">
+
+                        <a href="/Patient/Edit/@item.Id"><i class="fa-solid fa-pen-to-square" title="Edit"></i></a> |
+
+                        <a href="/Patient/Details/@item.Id"><i class="fa-solid fa-circle-info" title="Details"></i></a>
+
+                        <a class="text-danger" href="/Patient/Delete/@item.Id" title="Delete"><i class="fa-solid fa-trash" title="Delete"></i></a>
                     </td>
                 </tr>
             }

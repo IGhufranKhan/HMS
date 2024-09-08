@@ -41,15 +41,17 @@ namespace HMS.Controllers
         public IActionResult Edit(Guid id)
         {
             var model = _doctorService.GetDoctorById(id);
+            ViewBag.GetDepartment = _masterService.GetDepartmentName();
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(Doctor doctor)
         {
             var model = _doctorService.GetDoctorById(doctor.Id);
-
-            _doctorService.DeleteDoctor(model);
-            _doctorService.AddDoctor(doctor);
+            if(model != null)
+            {
+                _doctorService.UpdateDoctor(doctor);
+            }
             return RedirectToAction("Index");
         }
 
@@ -60,12 +62,7 @@ namespace HMS.Controllers
         }
         public IActionResult Delete(Guid id)
         {
-            var model = _doctorService.GetDoctorById(id);
-            if (model != null) 
-            {
-             model.IsActive = false;
-            }
-            _doctorService.UpdateDoctor(model);
+            _doctorService.DeleteDoctor(id);
             return RedirectToAction("Index");
         }
 

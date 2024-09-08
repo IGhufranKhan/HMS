@@ -40,8 +40,7 @@ namespace HMS.Controllers
         }
         public IActionResult Create()
         {
-            //var model = Seeds.SeedDoctor();
-            //var model1 = model.Select(x => new { x.Id, x.Name }).ToList();
+            
             ViewBag.Doctors = _masterService.GetDoctorDropdownList();
             return View();
         }
@@ -63,21 +62,11 @@ namespace HMS.Controllers
         [HttpPost]
         public IActionResult Edit(Patient patient)
         {
-            var model = _patientService.GetPatientById(patient.Id);
-            if (model != null)
+            if(patient != null)
             {
-                model.Name = patient.Name;
-                model.Age = patient.Age;
-                model.Gender = patient.Gender;
-                model.ContactNumber = patient.ContactNumber;
-                model.Email = patient.Email;
-                model.AddressId = patient.AddressId;
-                model.DoctorId = patient.DoctorId;
-                model.AdmissionDate = patient.AdmissionDate;
-                model.DischargeDate = patient.DischargeDate;
-                _patientService.UpdatePatient(model);
+                _patientService.UpdatePatient(patient);
             }
-
+          
             return RedirectToAction("Index");
         }
 
@@ -88,12 +77,7 @@ namespace HMS.Controllers
         }
         public IActionResult Delete(Guid id)
         {
-            var model = _patientService.GetPatientById(id);
-            if (model != null)
-            {
-                model.IsActive = false;
-            }
-            _patientService.UpdatePatient(model);
+            _patientService.DeletePatient(id);
             return RedirectToAction("Index");
         }
     }

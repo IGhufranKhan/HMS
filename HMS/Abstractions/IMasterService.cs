@@ -4,8 +4,8 @@ namespace HMS.Abstractions
 {
     public interface IMasterService
     {
-        IEnumerable<(Guid Id, string Name)> GetPatientNames();
-        IEnumerable<SelectListItem> GetDoctorDropdownList();
-        IEnumerable<SelectListItem> GetDepartmentName();
+        List<SelectListItem> GetPatientNames();
+        List<SelectListItem> GetDoctorDropdownList();
+        List<SelectListItem> GetDepartmentName();
     }
 }

@@ -1,5 +1,7 @@
 ﻿using HMS.Abstractions;
 using HMS.Models;
+using HMS.Services;
+using HMS.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
@@ -9,15 +11,17 @@ namespace HMS.Controllers
     {
         private readonly IBillingService _billingService;
         private readonly HmsContext _hmsContext;
-        public BillingController(IBillingService billingService, HmsContext hmsContext)
+        private readonly IMasterService _masterService;
+        public BillingController(IBillingService billingService, HmsContext hmsContext, IMasterService masterService)
         {
             _billingService = billingService;
             _hmsContext = hmsContext;
+            _masterService = masterService;
         }
         public IActionResult Index(string searchName)
         {
 
-            var billings = _hmsContext.Billings.ToList();
+            var billings = _billingService.GetBillings();
             //if (!string.IsNullOrEmpty(searchName))
             //{
             //    billings = billings.Where(x => x.Contains(searchName)).ToList();
@@ -26,6 +30,8 @@ namespace HMS.Controllers
         }
         public IActionResult Create()
         {
+            ViewBag.GetPatients = _masterService.GetPatientNames();
+            ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
             return View();
         }
         [HttpPost]
@@ -37,17 +43,18 @@ namespace HMS.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var model = new Billing();
-            model = _billingService.GetBillingById(id);
+            ViewBag.GetPatients = _masterService.GetPatientNames();
+            ViewBag.GetDoctors = _masterService.GetDoctorDropdownList();
+            var  model = _billingService.GetBillingById(id);
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(Billing billing)
         {
-            var model = _billingService.GetBillingById(billing.Id);
-
-            _billingService.DeleteBilling(model);
-            _billingService.AddBilling(billing);
+            if (billing != null)
+            {
+                _billingService.UpdateBilling(billing);
+            }
             return RedirectToAction("Index");
         }
 
@@ -58,8 +65,7 @@ namespace HMS.Controllers
         }
         public IActionResult Delete(Guid id)
         {
-            var model = _billingService.GetBillingById(id);
-            _billingService.DeleteBilling(model);
+            _billingService.DeleteBilling(id);
             return RedirectToAction("Index");
         }
 

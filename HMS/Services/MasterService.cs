@@ -13,42 +13,29 @@ namespace HMS.Services
             _hmsContext = hmsContext;
         }
 
-        public IEnumerable<(Guid Id, string Name)> GetPatientNames()
+        public List<SelectListItem> GetPatientNames()
         {
             return _hmsContext.Patients
                               .Where(x => x.IsActive == true && x.Name != null)
-                              .Select(x => new { x.Id, x.Name })
-                              .AsEnumerable()
-                              .Select(x => (x.Id, x.Name!)) 
+                              .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Name })
                               .ToList();
         }
 
 
-        public IEnumerable<SelectListItem> GetDoctorDropdownList()
+        public List<SelectListItem> GetDoctorDropdownList()
         {
             return _hmsContext.Doctors
                       .Where(x => x.IsActive == true)
-                      .Select(x => new { x.Id, x.Name })
-                      .AsEnumerable() 
-                      .Select(x => new SelectListItem
-                      {
-                          Value = x.Id.ToString(),  
-                          Text = x.Name ?? "Unknown" 
-                      })
+                      .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Name })                    
                       .ToList();  
 
         }
-        public IEnumerable<SelectListItem> GetDepartmentName()
+        public List<SelectListItem> GetDepartmentName()
         {
             return _hmsContext.Departments
                               .Where(x => x.IsActive == true || x.IsActive == null && x.Name != null)
-                              .Select(x => new { x.Id, x.Name })
-                              .AsEnumerable()
-                              .Select(x => new SelectListItem
-                              {
-                                  Value = x.Id.ToString(),
-                                  Text = x.Name ?? "Unknown"
-                              }).ToList();
+                              .Select(x => new SelectListItem{Value = x.Id.ToString(), Text = x.Name })
+                              .ToList();
 
         }
 

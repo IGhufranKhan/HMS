@@ -13,5 +13,6 @@ namespace HMS.Abstractions
         Appointment? GetAppointmentById(Guid id);
 
         List<Appointment> GetAppointments();
+        void UpdateAppointment(Appointment appointment);
     }
 }

@@ -6,9 +6,9 @@ namespace HMS.Abstractions
     {
         void AddDoctor(Doctor doctor);
 
-        void DeleteDoctor(Doctor doctor);
-
         void DeleteDoctor(Guid id);
+
+        //void DeleteDoctor(Guid id);
 
         Doctor? GetDoctorById(Guid id);
 

@@ -73,11 +73,14 @@
                         </td>
                     }
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                    <td style="width: 8%;">
+
+                        <a href="/Doctor/Edit/@item.Id"><i class="fa-solid fa-pen-to-square" title="Edit"></i></a> |
+
+                        <a href="/Doctor/Details/@item.Id"><i class="fa-solid fa-circle-info" title="Details"></i></a>
+
+                        <a class="text-danger" href="/Doctor/Delete/@item.Id" title="Delete"><i class="fa-solid fa-trash" title="Delete"></i></a>
+                    </td>
         </tr>
 }
     </tbody>

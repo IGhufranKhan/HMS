@@ -13,5 +13,6 @@ namespace HMS.Abstractions
         Billing? GetBillingById(Guid id);
 
         List<Billing> GetBillings();
+        void UpdateBilling(Billing billing);
     }
 }

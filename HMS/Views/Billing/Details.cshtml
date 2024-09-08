@@ -18,16 +18,16 @@
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PatientId)
+            @Html.DisplayName("Patient Name")
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PatientId)
+            @Html.DisplayFor(model => model.Patient.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DoctorId)
+            @Html.DisplayName("Doctor Name")
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DoctorId)
+            @Html.DisplayFor(model => model.Doctor.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Amount)
