@@ -25,9 +25,17 @@ public partial class HmsContext : DbContext
 
     public virtual DbSet<Doctor> Doctors { get; set; }
 
+    public virtual DbSet<Invoice> Invoices { get; set; }
+
     public virtual DbSet<Member> Members { get; set; }
 
     public virtual DbSet<Patient> Patients { get; set; }
+
+    public virtual DbSet<Product> Products { get; set; }
+
+    public virtual DbSet<Student> Students { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -117,6 +125,11 @@ public partial class HmsContext : DbContext
                 .HasConstraintName("FK_Doctor_Department");
         });
 
+        modelBuilder.Entity<Invoice>(entity =>
+        {
+            entity.ToTable("Invoice");
+        });
+
         modelBuilder.Entity<Member>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Members_1");
@@ -157,6 +170,47 @@ public partial class HmsContext : DbContext
             entity.HasOne(d => d.Doctor).WithMany(p => p.Patients)
                 .HasForeignKey(d => d.DoctorId)
                 .HasConstraintName("FK_Patient_Doctor");
+        });
+
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.ToTable("Product");
+
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Student>(entity =>
+        {
+            entity.ToTable("Student");
+
+            entity.Property(e => e.ContactNo).HasMaxLength(50);
+            entity.Property(e => e.Email).HasMaxLength(200);
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC84C02FCB");
+
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053443DB5AED").IsUnique();
+
+            entity.HasIndex(e => e.UserName, "UQ__Users__C9F284565FBF30F9").IsUnique();
+
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("UserID");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

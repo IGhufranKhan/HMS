@@ -5,7 +5,7 @@ namespace HMS.Models;
 
 public partial class Doctor
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     public string? Name { get; set; }
 
@@ -19,7 +19,7 @@ public partial class Doctor
 
     public Guid? DepartmentId { get; set; }
 
-    public bool? IsActive { get; set; } = true;
+    public bool? IsActive { get; set; }
 
     public virtual ICollection<Appointment> Appointments { get; } = new List<Appointment>();
 

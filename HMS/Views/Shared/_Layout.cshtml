@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using HMS.Abstractions;
+@inject IContextService context;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -42,18 +44,30 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="/">Home</a></li>
-                        <li><a href="/Home/ContactUs">Contact Us</a></li>
                         
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@* <span class="badge custom-badge red pull-right">Extra</span> *@Menu <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/Patient">Patient</a></li>
-                                <li><a href="/Doctor">Doctor</a></li>
-                                <li><a href="/Appointment">Appointment</a></li>
-                                <li><a href="/Billing">Billing</a></li>
-                            </ul>
-                        </li>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/Home/ContactUs">Contact Us</a></li>
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@* <span class="badge custom-badge red pull-right">Extra</span> *@Menu <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/Patient/Index">Patient</a></li>
+                                    <li><a href="/Doctor/Index">Doctor</a></li>
+                                    <li><a href="/Appointment/Index">Appointment</a></li>
+                                    <li><a href="/Billing/Index">Billing</a></li>
+                                </ul>
+                            </li>
+                        @if (context.IsUserLoggedIn() == true)
+                        {
+                            <li><a href="/Authentication/Logout">Logout</a></li>
+
+                        }
+                        else
+                        {
+                            <li><a href="/Authentication/Signup">Sign Up</a></li>
+                            <li><a href="/Authentication/Login">Login</a></li>
+                            
+                        }
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->

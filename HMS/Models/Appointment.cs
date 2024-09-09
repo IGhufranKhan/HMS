@@ -5,7 +5,7 @@ namespace HMS.Models;
 
 public partial class Appointment
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     public Guid? PatientId { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Appointment
 
     public bool? IsCompleted { get; set; }
 
-    public bool? IsActive { get; set; } = true;
+    public bool? IsActive { get; set; }
 
     public virtual Doctor? Doctor { get; set; }
 

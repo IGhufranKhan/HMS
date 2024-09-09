@@ -5,7 +5,7 @@ namespace HMS.Models;
 
 public partial class Address
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     public string? Street { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Address
 
     public string? Country { get; set; }
 
-    public bool? IsActive { get; set; } = true;
+    public bool? IsActive { get; set; }
 
     public virtual ICollection<Patient> Patients { get; } = new List<Patient>();
 }

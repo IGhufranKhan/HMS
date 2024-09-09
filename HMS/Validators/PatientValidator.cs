@@ -21,6 +21,7 @@ namespace HMS.Validators
                 .Matches(@"^\d{10,15}$").WithMessage("Contact number must be between 10 and 15 digits.");
 
             RuleFor(p => p.Email)
+                .NotNull().WithMessage("Email is required")
                 .EmailAddress().When(p => !string.IsNullOrEmpty(p.Email))
                 .WithMessage("Invalid email format.");
 

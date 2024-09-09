@@ -5,7 +5,7 @@ namespace HMS.Models;
 
 public partial class Patient
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     public string? Name { get; set; }
 
@@ -25,7 +25,7 @@ public partial class Patient
 
     public DateTime? DischargeDate { get; set; }
 
-    public bool? IsActive { get; set; } = true;
+    public bool? IsActive { get; set; }
 
     public virtual Address? Address { get; set; }
 
