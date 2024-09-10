@@ -6,20 +6,24 @@ using HMS.Abstractions;
 using HMS.ViewModels;
 using HMS.Models;
 using Microsoft.AspNetCore.Authorization;
+using HMS.DTO_s;
 
 namespace HMS.Controllers;
 
 public class AuthenticationController : Controller
 {
     private readonly IUsersService _userService;
+    private readonly IEmailService _emailService;
 
     private readonly IConfigurationService _configurationService;
     public AuthenticationController(
         IUsersService userService,
-        IConfigurationService configurationService)
+        IConfigurationService configurationService,
+        IEmailService emailService)
     {
         _userService = userService;
         _configurationService = configurationService;
+        _emailService = emailService;
     }
 
     public IActionResult Login()
@@ -72,7 +76,22 @@ public class AuthenticationController : Controller
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), properties);
+            SendEmailDto emailDto = new SendEmailDto();
+            emailDto.To = user.Email;
+            emailDto.Subject = "Login Email";
+            emailDto.PlainText = "Congratulations! You have successfully logged in to HMS.";
 
+            emailDto.Html = @"<html>
+    <body>
+        <h1>Congratulations!</h1>
+        <p>You have successfully logged in to <strong>HMS</strong>.</p>
+        <p>If you did not perform this login, please contact support immediately.</p>
+        <br/>
+        <p>Best regards,</p>
+        <p>The HMS Team</p>
+    </body>
+    </html>";
+            _emailService.SendEmail(emailDto);
             return RedirectToAction("Index", "Home");
         }
       

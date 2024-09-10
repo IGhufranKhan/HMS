@@ -1,5 +1,6 @@
 using FluentValidation;
 using HMS.Abstractions;
+using HMS.Configuration;
 using HMS.Models;
 using HMS.Services;
 using HMS.Validators;
@@ -13,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("HMS");
 builder.Services.AddDbContext<HmsContext>(options
           => options.UseSqlServer(connectionString));
+var configuration = builder.Configuration;
+builder.Services.Configure<EmailConfiguration>(configuration.GetSection("EmailConfiguration"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 // Add dependency injections
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IContextService, ContextService>();
