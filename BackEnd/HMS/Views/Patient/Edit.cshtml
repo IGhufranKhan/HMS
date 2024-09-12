@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit">
+            <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
                 <div class="row">
@@ -117,7 +117,29 @@
                             <span asp-validation-for="DischargeDate" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label asp-for="ProfilePictureId" class="control-label">Profile Picture</label>
+                            <div>
+                                @if (Model.ProfilePictureId != null)
+                                {
+                                    <img src="~/uploads/@Model.ProfilePictureId" class="rounded-circle" width="100" height="100" alt="Profile Picture" />
+                                }
+                            </div>
+                            @if (Model.ProfilePictureId != null)
+                            {
+                                <!-- Button to remove picture -->
+                                <form asp-action="RemovePicture" method="post">
+                                    <input type="hidden" name="Id" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-danger">Remove Picture</button>
+                                </form>
+                            }
+                            <div class="form-group">
+                                <label asp-for="ProfilePictureId" class="control-label">Upload New Picture</label>
+                                <input asp-for="ProfilePictureId" class="form-control" type="file" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -130,4 +152,13 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('#remove-picture').click(function () {
+            $('#new-picture').val(''); // Clear new picture input
+        });
+    });
+</script>

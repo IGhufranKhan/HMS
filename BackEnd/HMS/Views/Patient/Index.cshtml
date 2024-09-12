@@ -15,6 +15,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>@Html.Display("Picture")</th>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
                 </th>
@@ -49,6 +50,16 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @if (item.ProfilePictureId != null)
+                        {
+                            <img src="../uploads/@item.ProfilePictureId" class="rounded-circle" width="50" height="50" alt="Profile Picture" />
+                        }
+                        else
+                        {
+                            <span>No Picture</span>
+                        }
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>

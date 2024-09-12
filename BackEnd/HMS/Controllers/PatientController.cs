@@ -5,6 +5,7 @@ using HMS.Abstractions;
 using HMS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -47,7 +48,7 @@ public class PatientController : Controller
         return View();
     }
     [HttpPost]
-    public IActionResult Create(Patient patient)
+    public IActionResult Create(Patient patient, IFormFile ProfilePictureId)
     {
         ValidationResult result = _validator.Validate(patient);
         if (!result.IsValid)
@@ -57,6 +58,18 @@ public class PatientController : Controller
             return View("Create", patient);
         }
         patient.AddressId = patient.Address?.Id;
+        if (ProfilePictureId != null)
+        {
+            var pictureName = "pp-" + Guid.NewGuid() + Path.GetExtension(ProfilePictureId.FileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", pictureName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                 ProfilePictureId.CopyToAsync(stream);
+            }
+            patient.ProfilePictureId = pictureName;
+        }
+
         _patientService.AddPatient(patient);
         return RedirectToAction("Index");
     }
@@ -69,7 +82,7 @@ public class PatientController : Controller
         return View(model);
     }
     [HttpPost]
-    public IActionResult Edit(Patient patient)
+    public IActionResult Edit(Patient patient, IFormFile ProfilePictureId)
     {
         ValidationResult result = _validator.Validate(patient);
         if (!result.IsValid)
@@ -80,6 +93,27 @@ public class PatientController : Controller
         }
         if (patient != null)
         {
+            if (ProfilePictureId != null)
+            {
+                // Remove old picture if needed
+                if (!string.IsNullOrEmpty(patient.ProfilePictureId))
+                {
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", patient.ProfilePictureId);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
+
+                var pictureName = "pp-" + Guid.NewGuid() + Path.GetExtension(ProfilePictureId.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", pictureName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    ProfilePictureId.CopyToAsync(stream);
+                }
+                patient.ProfilePictureId = pictureName;
+            }
 
             _patientService.UpdatePatient(patient);
         }
@@ -97,4 +131,29 @@ public class PatientController : Controller
         _patientService.DeletePatient(id);
         return RedirectToAction("Index");
     }
+    [HttpPost]
+    public IActionResult RemovePicture(Guid id)
+    {
+        var patient =  _patientService.GetPatientById(id);
+        if (patient == null) return NotFound();
+
+        if (!string.IsNullOrEmpty(patient.ProfilePictureId))
+        {
+            // Get the file path
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", patient.ProfilePictureId);
+
+            // Delete the file from the file system
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            // Remove the picture reference from the database
+            patient.ProfilePictureId = null;
+            _patientService.UpdatePatient(patient);
+            
+        }
+        return RedirectToAction("Edit", new { id = id });
+    }
+
 }

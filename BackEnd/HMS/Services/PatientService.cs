@@ -21,6 +21,7 @@ namespace HMS.Services
         }
         public void AddPatient(Patient patient)
         {
+            patient.IsActive = true;
             _hmsContext.Patients.Add(patient);
             _hmsContext.SaveChanges();
         }
@@ -69,6 +70,7 @@ namespace HMS.Services
                     model.DoctorId = patient.DoctorId;
                     model.AdmissionDate = patient.AdmissionDate;
                     model.DischargeDate = patient.DischargeDate;
+                    model.ProfilePictureId = patient.ProfilePictureId;
                 }
                 _hmsContext.Patients.Update(model);
                 _hmsContext.SaveChanges();

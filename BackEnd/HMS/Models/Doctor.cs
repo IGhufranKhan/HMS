@@ -21,6 +21,8 @@ public partial class Doctor
 
     public bool? IsActive { get; set; }
 
+    public string? ProfilePictureId { get; set; }
+
     public virtual ICollection<Appointment> Appointments { get; } = new List<Appointment>();
 
     public virtual ICollection<Billing> Billings { get; } = new List<Billing>();
