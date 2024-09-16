@@ -44,7 +44,8 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                     <ul class="nav navbar-nav">
-                        
+                        @if (User.Identity.IsAuthenticated)
+                    {
                             <li class="active"><a href="/">Home</a></li>
                             <li><a href="/Home/ContactUs">Contact Us</a></li>
 
@@ -57,9 +58,21 @@
                                     <li><a href="/Billing/Index">Billing</a></li>
                                 </ul>
                             </li>
-                        @if (context.IsUserLoggedIn() == true)
-                        {
+                      
+                      
                             <li><a href="/Authentication/Logout">Logout</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="" alt="Profile Picture" class="rounded-circle" style="width: 40px; height: 40px;">
+                                    @User.Claims.First().Value
+                                </a>
+                                
+                            </li>
+                            <ul class="dropdown-menu">
+                            
+                                <li><a class="dropdown-item" href="@Url.Action("Manage", "Account")">Account Management</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Logout", "Authentication")">Logout</a></li>
+                            </ul>
 
                         }
                         else

@@ -190,11 +190,11 @@ public partial class HmsContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC84C02FCB");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACDABED635");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053443DB5AED").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534BDDB83C1").IsUnique();
 
-            entity.HasIndex(e => e.UserName, "UQ__Users__C9F284565FBF30F9").IsUnique();
+            entity.HasIndex(e => e.UserName, "UQ__Users__C9F28456735AD770").IsUnique();
 
             entity.Property(e => e.UserId)
                 .HasDefaultValueSql("(newid())")
@@ -207,6 +207,7 @@ public partial class HmsContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.PasswordSalt).HasMaxLength(255);
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");

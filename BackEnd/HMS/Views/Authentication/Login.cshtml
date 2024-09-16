@@ -76,12 +76,14 @@
     </style>
 </head>
 <body>
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
     <form asp-controller="Authentication" asp-action="Login" method="post">
         <h1>Login</h1>
         
         <input type="text" placeholder="Email or username" asp-for="EmailOrUserName" />
         
-        <input type="password" placeholder="PassWord" asp-for="PassWord" />
+        <input type="password" placeholder="PassWord" asp-for="Password" />
 
         <label>
             <input type="checkbox" asp-for="KeepLoggedIn" />

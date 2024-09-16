@@ -1,0 +1,25 @@
+
+  <div class="book-table-container">
+    <h2>Doctor List for </h2>
+    <table class="book-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Speciality</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        @for (doctor of doctors; track doctor) {
+            <tr>
+                <td>{{ doctor.id }}</td>
+                <td>{{ doctor.name }}</td>
+                <td>{{ doctor.specialty }}</td>
+                
+              </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  
