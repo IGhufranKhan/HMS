@@ -18,6 +18,6 @@ public class UserVM
     public string PasswordSalt { get; set; } = null!;
 
     public string Password { get; set; } = null!;
-    public string ProfilePicture { get; set; } 
-    public int? Age { get; set; } 
+    public int? Age { get; set; }
+    public string? ProfilePicture { get; set; }
 }

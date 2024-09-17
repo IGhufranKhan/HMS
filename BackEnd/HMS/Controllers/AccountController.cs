@@ -1,24 +1,33 @@
 ﻿using HMS.Abstractions;
+using HMS.Models;
 using HMS.Services;
 using HMS.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+
 
 namespace HMS.Controllers
 {
-    
-    
+
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IUsersService _userService;
-        public AccountController(IUsersService userService)
+        private readonly IContextService _contextService;
+        private readonly IUploadPictureService _uploadPictureService;
+
+
+        public AccountController(IUsersService userService, IContextService contextService, IUploadPictureService uploadPictureService)
         {
             _userService = userService;
+            _contextService = contextService;
+            _uploadPictureService = uploadPictureService;
         }
+
         public IActionResult Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = _userService.GetUserByUserName(userId);
+            var userId = _contextService.GetUserId();
+            var user = _userService.GetUserById(Guid.Parse(userId));
             var model = new AccountViewModel
             {
                 Id = user.UserId,
@@ -32,18 +41,20 @@ namespace HMS.Controllers
         [HttpGet]
         public IActionResult Manage()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = _userService.GetUserByUserName(userId);
+            var userId = _contextService.GetUserId();
+            var user = _userService.GetUserById(Guid.Parse(userId)); 
             var model = new AccountViewModel
             {
                 Id = user.UserId,
                 Name = user.FirstName + " " + user.LastName,
                 Age = user.Age,
                 Email = user.Email,
-                ProfilePicture = user.ProfilePicture!
+                ProfilePicture =_contextService.GetUserProfilePicture() // Path to the profile picture
             };
+
             return View(model);
         }
+
 
         // Post: Account/UpdateProfile
         [HttpPost]
@@ -58,11 +69,11 @@ namespace HMS.Controllers
                 user.Age = model.Age;
                 user.Email = model.Email;
                 _userService.Update(user);
-                return RedirectToAction("Index");
+                return RedirectToAction("Manage");
 
             }
             
-            return View("Index", model);
+            return View("Manage", model);
         }
         // Post: Account/UploadPicture
         [HttpPost]
@@ -70,29 +81,43 @@ namespace HMS.Controllers
         {
             if (profilePicture != null && profilePicture.Length > 0)
             {
-                var fileName = Path.GetFileName(profilePicture.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    profilePicture.CopyTo(stream);
-                }
+                var fileName = _uploadPictureService.UploadPicture(profilePicture);
+                _contextService.updateProfilePicture(fileName);
 
                 // Update the user's profile picture
                 //_userService.ProfilePicture = "/images/" + fileName;
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Manage");
+        }
+        [HttpPost]
+        public IActionResult RemovePicture(Guid Id, IFormFile profilePicture)
+        {
+            if (Id != Guid.Empty)
+            {
+                var user = _userService.GetUserById(Id);
+
+                if (user != null)
+                {
+                    // Remove old picture if needed
+                    if (!string.IsNullOrEmpty(user.ProfilePicture))
+                    {
+                        var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", user.ProfilePicture);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                        user.ProfilePicture = null;
+                        _userService.Update(user);
+                    }
+
+                }
+            }
+            return RedirectToAction("Manage");
+
         }
 
 
-
     }
-    //[HttpPost]
-    //public IActionResult RemovePicture()
-    //{
-    //    // Set the profile picture to a default image
-    //    _userService.ProfilePicture = "/images/default-profile.jpg";
-    //    return _userService("Manage");
-    //}
+    
 }

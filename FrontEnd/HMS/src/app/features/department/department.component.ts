@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IDepartment, SeedServiceService } from '../../services/seed-service.service';
 
 @Component({
   selector: 'app-department',
@@ -8,10 +9,18 @@ import { Component } from '@angular/core';
   styleUrl: './department.component.css'
 })
 export class DepartmentComponent {
-  departments = [
-    { id: 1, name: 'Cardiology' },
-    { id: 2, name: 'Neurology' },
-    { id: 3, name: 'Oncology' },
-    // ...
-  ];
+  departments : IDepartment[] = []; 
+  trackDepartmentById(index: number, department: any) {
+    return department.id;
+  }
+  constructor(private SeedServiceService : SeedServiceService)
+  {
+    console.log("I am a constructor of seed service")
+  }
+ 
+  ngOnInit()
+  {
+    this.departments = this.SeedServiceService.GetDepartment()
+  }
 }
+

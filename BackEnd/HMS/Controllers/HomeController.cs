@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace HMS.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 
 public class HomeController : Controller
 {
@@ -26,7 +26,7 @@ public class HomeController : Controller
         _doctorService = doctorService;
         _departmentService = departmentService;
     }
-
+    [Authorize]
     public IActionResult Index()
     {
         _trackingService.IncrementVisitCount();

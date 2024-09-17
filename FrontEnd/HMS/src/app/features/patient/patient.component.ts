@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { IPatient , SeedServiceService} from '../../services/seed-service.service';
+
 
 @Component({
   selector: 'app-patient',
@@ -8,13 +10,17 @@ import { Component } from '@angular/core';
   styleUrl: './patient.component.css'
 })
 export class PatientComponent {
-  patients = [
-    { id: 1, name: 'John Doe', age: 30 },
-    { id: 2, name: 'Jane Smith', age: 25 },
-    { id: 3, name: 'Bob Johnson', age: 40 },
-    // ...
-  ];
+  patients : IPatient[] = []
   trackPatientById(index: number, patient: any) {
     return patient.id;
+  }
+  constructor(private SeedServiceService : SeedServiceService)
+  {
+    console.log("I am a constructor of seed service")
+  }
+ 
+  ngOnInit()
+  {
+    this.patients = this.SeedServiceService.GetPatient()
   }
 }

@@ -17,13 +17,15 @@ public class PatientController : Controller
     private readonly HmsContext _hmsContext;
     private readonly IMasterService _masterService;
     private IValidator<Patient> _validator;
+    private readonly IUploadPictureService _uploadPictureService;
 
-    public PatientController(IPatientService patientService, HmsContext hmsContext, IMasterService masterService, IValidator<Patient> validator)
+    public PatientController(IPatientService patientService, HmsContext hmsContext, IMasterService masterService, IValidator<Patient> validator, IUploadPictureService uploadPictureService)
     {
         _patientService = patientService;
         _hmsContext = hmsContext;
         _masterService = masterService;
         _validator = validator;
+        _uploadPictureService = uploadPictureService;
     }
     public async Task <IActionResult> Index(string searchName)
     {
@@ -60,13 +62,7 @@ public class PatientController : Controller
         patient.AddressId = patient.Address?.Id;
         if (ProfilePictureId != null)
         {
-            var pictureName = "pp-" + Guid.NewGuid() + Path.GetExtension(ProfilePictureId.FileName);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", pictureName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                 ProfilePictureId.CopyToAsync(stream);
-            }
+            var pictureName = _uploadPictureService.UploadPicture(ProfilePictureId);
             patient.ProfilePictureId = pictureName;
         }
 
@@ -105,13 +101,7 @@ public class PatientController : Controller
                     }
                 }
 
-                var pictureName = "pp-" + Guid.NewGuid() + Path.GetExtension(ProfilePictureId.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", pictureName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    ProfilePictureId.CopyToAsync(stream);
-                }
+                string pictureName = _uploadPictureService.UploadPicture(ProfilePictureId);
                 patient.ProfilePictureId = pictureName;
             }
 

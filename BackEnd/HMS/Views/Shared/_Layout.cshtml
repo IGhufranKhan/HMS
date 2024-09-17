@@ -44,13 +44,15 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                     <ul class="nav navbar-nav">
-                        @if (User.Identity.IsAuthenticated)
-                    {
+                        @if (context.IsUserLoggedIn())
+                        {
                             <li class="active"><a href="/">Home</a></li>
                             <li><a href="/Home/ContactUs">Contact Us</a></li>
 
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@* <span class="badge custom-badge red pull-right">Extra</span> *@Menu <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Menu <b class="caret"></b>
+                                </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/Patient/Index">Patient</a></li>
                                     <li><a href="/Doctor/Index">Doctor</a></li>
@@ -58,30 +60,31 @@
                                     <li><a href="/Billing/Index">Billing</a></li>
                                 </ul>
                             </li>
-                      
-                      
-                            <li><a href="/Authentication/Logout">Logout</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="" alt="Profile Picture" class="rounded-circle" style="width: 40px; height: 40px;">
-                                    @User.Claims.First().Value
-                                </a>
-                                
-                            </li>
-                            <ul class="dropdown-menu">
-                            
-                                <li><a class="dropdown-item" href="@Url.Action("Manage", "Account")">Account Management</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Logout", "Authentication")">Logout</a></li>
-                            </ul>
 
+                            <li><a href="/Authentication/Logout">Logout</a></li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                    <!-- User's profile picture -->
+                                    <img src="@context.GetUserProfilePicture()" class="rounded-circle" style="width: 40px;" />
+                                    <!-- Display the user's name or first claim -->
+                                    @context.GetUserName()
+                                </a>
+
+                                <!-- Dropdown menu for account management and logout -->
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("Manage", "Account")">Account Management</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Logout", "Authentication")">Logout</a></li>
+                                </ul>
+                            </li>
                         }
                         else
                         {
                             <li><a href="/Authentication/Signup">Sign Up</a></li>
                             <li><a href="/Authentication/Login">Login</a></li>
-                            
                         }
                     </ul>
+
                 </div>
                 <!-- /.navbar-collapse -->
             </div>

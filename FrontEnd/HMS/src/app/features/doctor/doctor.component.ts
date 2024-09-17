@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IDoctor, SeedServiceService } from '../../services/seed-service.service';
 
 @Component({
   selector: 'app-doctor',
@@ -9,10 +10,17 @@ import { Component } from '@angular/core';
   styleUrl: './doctor.component.css'
 })
 export class DoctorComponent {
-  doctors :any = [
-    { id: 1, name: 'Dr. Smith', specialty: 'Cardiology' },
-    { id: 2, name: 'Dr. Johnson', specialty: 'Neurology' },
-    { id: 3, name: 'Dr. Lee', specialty: 'Oncology' },
-    // ...
-  ];
+  doctors : IDoctor[] = []
+  
+  constructor(private SeedServiceService : SeedServiceService)
+  {
+    console.log("I am a constructor of seed service")
+  }
+ 
+  ngOnInit()
+  {
+    this.doctors = this.SeedServiceService.GetDoctors()
+  }
+  
 }
+
