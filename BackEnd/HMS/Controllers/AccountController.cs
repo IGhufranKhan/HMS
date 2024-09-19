@@ -176,13 +176,10 @@ namespace HMS.Controllers
         [HttpGet]
         public IActionResult PasswordChange()
         {
-            // Ensure the user has verified the OTP before allowing password change.
             if (TempData["OtpVerified"] != null && (bool)TempData["OtpVerified"])
             {
                 return View(new ChangePasswordViewModel());
             }
-
-            // If OTP is not verified, redirect to some appropriate page (e.g., OTP request page).
             return View(new ChangePasswordViewModel());
         }
         [HttpPost]
@@ -191,19 +188,16 @@ namespace HMS.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // If the model state is invalid, return the view with the validation errors.
+                
                 return View(model);
             }
 
-            // Ensure the user has verified the OTP before allowing password change.
             bool isOtpverfied = VerifyOtp(model.Otp);
             if (TempData["OtpVerified"] == null || !(bool)TempData["OtpVerified"])
             {
                 ModelState.AddModelError(string.Empty, "OTP verification is required.");
                 return View(model);
             }
-
-            // Get the current logged-in user (this depends on how you handle user management in your app).
             var user =  _contextService.GetUser();
             if (user == null)
             {
