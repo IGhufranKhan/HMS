@@ -5,12 +5,11 @@ using HMS.Abstractions;
 using HMS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 
 
 namespace HMS.Controllers;
-[AllowAnonymous]
+[Authorize]
 public class PatientController : Controller
 {
     private readonly IPatientService _patientService;
@@ -126,22 +125,14 @@ public class PatientController : Controller
     {
         var patient =  _patientService.GetPatientById(id);
         if (patient == null) return NotFound();
-
         if (!string.IsNullOrEmpty(patient.ProfilePictureId))
         {
-            // Get the file path
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", patient.ProfilePictureId);
-
-            // Delete the file from the file system
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);
             }
-
-            // Remove the picture reference from the database
             patient.ProfilePictureId = null;
-            _patientService.UpdatePatient(patient);
-            
         }
         return RedirectToAction("Edit", new { id = id });
     }

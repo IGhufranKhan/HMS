@@ -82,6 +82,32 @@ public class UsersService : IUsersService
 
             _context.SaveChanges();
         }
-
     }
+        public bool IsUpdate(User user)
+        {
+            //var existintnguser = GetUserById(user.UserId);
+            if (user != null)
+            {
+                user.UpdatedAt = DateTime.Now.Date;
+                //user.UserId = Guid.NewGuid();
+                //existintnguser.UserName = user.UserName;
+                //existintnguser.PasswordHash = user.PasswordHash;
+                //existintnguser.Email = user.Email;
+                //existintnguser.PasswordSalt = user.PasswordSalt;
+                //existintnguser.FirstName = user.FirstName;
+                //existintnguser.LastName = user.LastName;
+                ////existintnguser.CreatedAt = DateTime.Now.Date;
+                //existintnguser.IsActive = true;
+                //existintnguser.Age = user.Age;
+                //existintnguser.ProfilePicture = user.ProfilePicture;
+                //existintnguser.UpdatedAt = DateTime.Now.Date;
+                _context.Users.Update(user);
+
+                _context.SaveChanges();
+            return true;
+            }
+            return false;
+            
+
+        }
 }

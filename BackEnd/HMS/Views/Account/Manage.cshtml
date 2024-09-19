@@ -3,70 +3,91 @@
 @{
     ViewData["Title"] = "Account Management";
 }
+<style>
+    .btn{
+        color: blue;
+    }
+</style>
+<div class="container my-5">
+    <h2 class="text-center mb-4">Manage Your Account</h2>
 
-<div class="container mt-4" style="padding:200px">
-    <h2>@ViewData["Title"]</h2>
-    <ul class="nav nav-tabs" id="accountTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="picture-tab" data-toggle="tab" href="#picture" role="tab" aria-controls="picture" aria-selected="false">Profile Picture</a>
-        </li>
-    </ul>
+    <!-- Profile Update Section -->
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Update Profile</h5>
+                    <form asp-action="UpdateProfile" method="post" class="form-horizontal">
+                        <input type="hidden" asp-for="Id" />
 
-    <div class="tab-content mt-3" id="accountTabContent">
-        <!-- Profile Tab -->
-        <div class="tab-pane show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <form asp-action="UpdateProfile" method="post" class="form-horizontal">
-                <input type="hidden" asp-for="Id" />
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Name</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="form-label">Name</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Age" class="form-label">Age</label>
+                            <input asp-for="Age" class="form-control" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                    </form>
                 </div>
-
-                <div class="form-group">
-                    <label asp-for="Age" class="control-label">Age</label>
-                    <input asp-for="Age" class="form-control" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label">Email</label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Update Profile</button>
-            </form>
-        </div>
-
-        <!-- Profile Picture Tab -->
-        <div class="tab-pane show" id="picture" role="tabpanel" aria-labelledby="picture-tab">
-            <div class="text-center mb-3">
-                @if (Model.ProfilePicture != null)
-                {
-                    <img src="@Url.Content(Model.ProfilePicture)" class="rounded-circle" alt="Profile Picture" width="150" height="150" />
-                }
-                else
-                {
-                    <img src="@Url.Content(Model.ProfilePicture)" class="rounded-circle" alt="Default Profile Picture" width="150" height="150" />
-                }
             </div>
-            <form asp-action="UploadPicture" method="post" enctype="multipart/form-data" class="mb-3">
-                <input type="hidden" asp-for="Id"/>
-                <div class="form-group">
-                    <label for="profilePicture">Upload New Picture</label>
-                    <input type="file" name="profilePicture" class="form-control" />
-                </div>
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </form>
 
-            <form asp-action="RemovePicture" method="post" class="mb-3">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger">Remove Picture</button>
-            </form>
+            <!-- Password Change Section -->
+            <div class="text-center">
+                <a href="@Url.Action("PasswordChange", "Account")" class="btn btn-link">Change Password</a>
+            </div>
+
+            <!-- Add a container to load the OTP modal dynamically -->
+            <div id="otpModalContainer"></div>
+        </div>
+    </div>
+
+    <!-- Profile Picture Section -->
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Profile Picture</h5>
+                    <div class="mb-3">
+                        @if (Model.ProfilePicture != null)
+                        {
+                            <img src="@Url.Content(Model.ProfilePicture)" class="rounded-circle" alt="Profile Picture" width="150" height="150" />
+                        }
+                        else
+                        {
+                            <img src="~/images/default-profile.png" class="rounded-circle" alt="Default Profile Picture" width="150" height="150" />
+                        }
+                    </div>
+
+                    <!-- Upload New Picture -->
+                    <form asp-action="UploadPicture" method="post" enctype="multipart/form-data" class="mb-3">
+                        <input type="hidden" asp-for="Id"/>
+                        <div class="form-group mb-3">
+                            <label for="profilePicture" class="form-label">Upload New Picture</label>
+                            <input type="file" name="profilePicture" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Upload</button>
+                    </form>
+
+                    <!-- Remove Picture -->
+                    <form asp-action="RemovePicture" method="post" class="mb-3">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger w-100">Remove Picture</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+

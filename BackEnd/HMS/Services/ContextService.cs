@@ -31,7 +31,20 @@ public class ContextService : IContextService
         }
         return "";
     }
-
+    public User GetUser()
+    {
+        var userId = GetUserId();
+        if (userId != null)
+        {
+            var user = _usersService.GetUserById(Guid.Parse(userId));
+            if (user != null)
+            {
+                
+                return user;
+            }
+        }
+        return null;
+    }
     public string GetUserName()
     {
         var user = _contextAccessor.HttpContext?.User;

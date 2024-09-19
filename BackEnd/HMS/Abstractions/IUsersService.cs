@@ -10,4 +10,5 @@ public interface IUsersService
     bool IsUserExist(string userName);
     void Update(User user);
     User? GetUserById(Guid Id);
+    bool IsUpdate(User user);
 }

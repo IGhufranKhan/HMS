@@ -7,5 +7,6 @@
         public int? Age { get; set; }
         public string Email { get; set; }
         public string ProfilePicture { get; set; } // URL or path to the profile picture
+        public string Password { get; set; }
     }
 }
